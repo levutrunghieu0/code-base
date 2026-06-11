@@ -4,9 +4,9 @@
  */
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as dotenv from 'dotenv';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../entities/user.entity';
 import { Role } from '../../common/enums/role.enum';
 
 dotenv.config();
@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
   port: parseInt(process.env.DB_PORT || '5432'),
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'fullstack_db',
+  database: process.env.DB_NAME || 'base_db',
   entities: [User],
   synchronize: true,
 });

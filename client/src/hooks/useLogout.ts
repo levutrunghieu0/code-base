@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/store/auth.store';
 import { authApi } from '@/api/auth.api';
 
@@ -13,7 +13,7 @@ export function useLogout() {
       // Best-effort — clear local state regardless
     } finally {
       logout();
-      navigate('/login');
+      navigate({ to: '/login' });
     }
   };
 

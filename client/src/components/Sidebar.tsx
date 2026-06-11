@@ -1,8 +1,7 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import { LogOut } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
-import { routeConfig } from '@/routes/route-config';
-import { cn } from '@/lib/utils';
+import { routerConfig } from '@/config/router-config';
 import { useLogout } from '@/hooks/useLogout';
 
 /** Dynamically renders only the menu items the current user's role can access */
@@ -10,13 +9,8 @@ export function Sidebar() {
   const { user } = useAuthStore();
   const { handleLogout } = useLogout();
 
-  const menuItems = routeConfig.filter(
-    (r) =>
-      r.showInMenu &&
-      r.requireAuth &&
-      r.icon &&
-      r.label &&
-      (!r.roles || !user || r.roles.includes(user.role)),
+  const visibleItems = routerConfig.menu.filter(
+    (item) => user && item.roles.includes(user.role),
   );
 
   return (
@@ -37,22 +31,20 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-        {menuItems.map(({ path, label, icon: Icon }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-sidebar-accent text-white'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-white',
-              )
-            }
+        {visibleItems.map(({ to, label, icon: Icon }) => (
+          <Link
+            key={to}
+            to={to}
+            activeOptions={{ exact: true }}
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-white"
+            activeProps={{
+              className:
+                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors bg-sidebar-accent text-white',
+            }}
           >
-            {Icon && <Icon className="h-4 w-4 shrink-0" />}
+            <Icon className="h-4 w-4 shrink-0" />
             {label}
-          </NavLink>
+          </Link>
         ))}
       </nav>
 

@@ -2,12 +2,17 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { winstonLoggerOptions } from './common/logger/winston.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    // Winston thay logger mặc định — ghi ra console + file logs/ (rotate theo ngày)
+    logger: WinstonModule.createLogger(winstonLoggerOptions),
+  });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('app.port') || 3000;

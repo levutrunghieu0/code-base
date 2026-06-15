@@ -5,6 +5,7 @@ import { routerConfig } from '@/config/router-config';
 import { useLogout } from '@/hooks/useLogout';
 import { useI18n } from '@/i18n/I18nProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeCustomizer } from './ThemeCustomizer';
 
 interface SidebarProps {
   onNavigate?: () => void;
@@ -73,6 +74,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           </Link>
         ))}
       </nav>
+
+      <div className="border-t border-sidebar-border p-3">
+        <ThemeCustomizer />
+      </div>
 
       {/* Logout */}
       <div className="border-t border-sidebar-border p-3">

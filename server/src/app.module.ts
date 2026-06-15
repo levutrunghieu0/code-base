@@ -5,6 +5,13 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ForecastModule } from './modules/forecast/forecast.module';
+import { GeminiModule } from './modules/gemini/gemini.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
+import { RecommendationModule } from './modules/recommendation/recommendation.module';
+import { SalesModule } from './modules/sales/sales.module';
+import { SchedulerModule } from './modules/scheduler/scheduler.module';
 
 @Module({
   imports: [
@@ -15,6 +22,13 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     DatabaseModule,
     AuthModule,
     UsersModule,
+    SalesModule,
+    InventoryModule,
+    ForecastModule,
+    RecommendationModule,
+    DashboardModule,
+    SchedulerModule,
+    GeminiModule,
   ],
 })
 export class AppModule implements NestModule {

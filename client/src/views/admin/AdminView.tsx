@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, Shield, Activity, ArrowRight } from 'lucide-react';
 import { Role } from '@/types';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export default function AdminView() {
+  const { t } = useI18n();
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: userApi.getAll,
@@ -15,19 +17,19 @@ export default function AdminView() {
 
   const stats = [
     {
-      title: 'Total Users',
+      title: t('admin.totalUsers'),
       value: users.length,
       icon: Users,
       color: 'text-blue-600',
     },
     {
-      title: 'Admins',
+      title: t('admin.admins'),
       value: users.filter((u) => u.role === Role.ADMIN).length,
       icon: Shield,
       color: 'text-red-600',
     },
     {
-      title: 'Active',
+      title: t('common.active'),
       value: users.filter((u) => u.isActive).length,
       icon: Activity,
       color: 'text-green-600',
@@ -38,12 +40,12 @@ export default function AdminView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">System overview</p>
+          <h1 className="text-2xl font-bold">{t('admin.title')}</h1>
+          <p className="text-muted-foreground">{t('admin.subtitle')}</p>
         </div>
         <Button asChild>
           <Link to="/admin/users">
-            Manage Users <ArrowRight className="ml-2 h-4 w-4" />
+            {t('admin.manageUsers')} <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       </div>
@@ -64,11 +66,11 @@ export default function AdminView() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Users</CardTitle>
+          <CardTitle>{t('admin.recentUsers')}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground">Loading…</p>
+            <p className="text-muted-foreground">{t('common.loading')}</p>
           ) : (
             <div className="space-y-2">
               {users.slice(0, 5).map((user) => (

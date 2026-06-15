@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
+import { I18nProvider } from './i18n/I18nProvider';
+import { ThemeProvider } from './theme/ThemeProvider';
 import { useInitAuth } from './hooks/useInitAuth';
 import { useAuthStore } from './store/auth.store';
 
@@ -29,9 +31,13 @@ export default function App() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* Auth state được bơm vào router context — beforeLoad guards đọc từ đây */}
-      <RouterProvider router={router} context={{ auth: { isAuthed: isAuthenticated, user } }} />
-    </QueryClientProvider>
+    <ThemeProvider>
+      <I18nProvider>
+        <QueryClientProvider client={queryClient}>
+          {/* Auth state được bơm vào router context — beforeLoad guards đọc từ đây */}
+          <RouterProvider router={router} context={{ auth: { isAuthed: isAuthenticated, user } }} />
+        </QueryClientProvider>
+      </I18nProvider>
+    </ThemeProvider>
   );
 }

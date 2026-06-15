@@ -7,10 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Trash2, RefreshCw } from 'lucide-react';
 import { Role, User } from '@/types';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export default function UsersView() {
   const queryClient = useQueryClient();
   const { user: me } = useAuthStore();
+  const { t } = useI18n();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const {
@@ -41,33 +43,33 @@ export default function UsersView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">{users.length} users total</p>
+          <h1 className="text-2xl font-bold">{t('users.title')}</h1>
+          <p className="text-muted-foreground">{t('users.total', { count: users.length })}</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh
+          {t('common.refresh')}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>All Users</CardTitle>
+          <CardTitle>{t('users.all')}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground py-4 text-center">Loading…</p>
+            <p className="py-4 text-center text-muted-foreground">{t('common.loading')}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="pb-3 text-left font-medium">Name</th>
-                    <th className="pb-3 text-left font-medium">Email</th>
-                    <th className="pb-3 text-left font-medium">Role</th>
-                    <th className="pb-3 text-left font-medium">Status</th>
-                    <th className="pb-3 text-left font-medium">Joined</th>
-                    <th className="pb-3 text-right font-medium">Actions</th>
+                    <th className="pb-3 text-left font-medium">{t('users.name')}</th>
+                    <th className="pb-3 text-left font-medium">{t('common.email')}</th>
+                    <th className="pb-3 text-left font-medium">{t('common.role')}</th>
+                    <th className="pb-3 text-left font-medium">{t('common.status')}</th>
+                    <th className="pb-3 text-left font-medium">{t('users.joined')}</th>
+                    <th className="pb-3 text-right font-medium">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -86,7 +88,7 @@ export default function UsersView() {
                               : 'bg-red-100 text-red-700'
                           }`}
                         >
-                          {user.isActive ? 'Active' : 'Inactive'}
+                          {user.isActive ? t('common.active') : t('common.inactive')}
                         </span>
                       </td>
                       <td className="py-3 text-muted-foreground">
@@ -98,7 +100,7 @@ export default function UsersView() {
                           size="icon"
                           disabled={user.id === me?.id || deletingId === user.id}
                           onClick={() => deleteMutation.mutate(user.id)}
-                          title={user.id === me?.id ? 'Cannot delete yourself' : 'Delete user'}
+                          title={user.id === me?.id ? t('users.deleteSelf') : t('users.delete')}
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>

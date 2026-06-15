@@ -2,52 +2,49 @@ import { Link } from '@tanstack/react-router';
 import { Shield, Users, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export default function HomeView() {
+  const { t } = useI18n();
+
   return (
     <div className="container py-16">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">Fullstack Boilerplate</h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          React + NestJS + PostgreSQL — Role-based Access Control
-        </p>
+      <div className="mb-16 text-center">
+        <h1 className="mb-4 text-4xl font-bold tracking-tight">{t('home.title')}</h1>
+        <p className="mb-8 text-xl text-muted-foreground">{t('home.subtitle')}</p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg">
-            <Link to="/login">Get Started</Link>
+            <Link to="/login">{t('home.getStarted')}</Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
-            <Link to="/register">Register</Link>
+            <Link to="/register">{t('common.register')}</Link>
           </Button>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader>
-            <Shield className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Admin</CardTitle>
+            <Shield className="mb-2 h-8 w-8 text-primary" />
+            <CardTitle>{t('nav.admin')}</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">{t('home.admin.description')}</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <BarChart3 className="mb-2 h-8 w-8 text-primary" />
+            <CardTitle>{t('manager.managers')}</CardTitle>
           </CardHeader>
           <CardContent className="text-muted-foreground">
-            Full access to all routes, user management, and system settings.
+            {t('home.manager.description')}
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <BarChart3 className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Manager</CardTitle>
+            <Users className="mb-2 h-8 w-8 text-primary" />
+            <CardTitle>{t('nav.users')}</CardTitle>
           </CardHeader>
-          <CardContent className="text-muted-foreground">
-            Access to reports, team overview, and manager dashboard.
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Users className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>User</CardTitle>
-          </CardHeader>
-          <CardContent className="text-muted-foreground">
-            Personal dashboard with profile management.
-          </CardContent>
+          <CardContent className="text-muted-foreground">{t('home.user.description')}</CardContent>
         </Card>
       </div>
     </div>

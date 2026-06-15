@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BarChart3, Users, TrendingUp } from 'lucide-react';
 import { Role } from '@/types';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export default function ManagerView() {
+  const { t } = useI18n();
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: userApi.getAll,
@@ -24,14 +26,14 @@ export default function ManagerView() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Manager Dashboard</h1>
-        <p className="text-muted-foreground">Team overview and reports</p>
+        <h1 className="text-2xl font-bold">{t('manager.title')}</h1>
+        <p className="text-muted-foreground">{t('manager.subtitle')}</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.totalUsers')}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -41,7 +43,7 @@ export default function ManagerView() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('manager.activeUsers')}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -51,7 +53,7 @@ export default function ManagerView() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Managers</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('manager.managers')}</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -62,11 +64,11 @@ export default function ManagerView() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Users by Role</CardTitle>
+          <CardTitle>{t('manager.usersByRole')}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground">Loading…</p>
+            <p className="text-muted-foreground">{t('common.loading')}</p>
           ) : (
             <div className="space-y-3">
               {Object.entries(stats.byRole).map(([role, count]) => (
@@ -82,15 +84,15 @@ export default function ManagerView() {
                   >
                     {role}
                   </Badge>
-                  <div className="flex items-center gap-2 flex-1 mx-4">
-                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="mx-4 flex flex-1 items-center gap-2">
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="h-full bg-primary rounded-full"
+                        className="h-full rounded-full bg-primary"
                         style={{ width: stats.total ? `${(count / stats.total) * 100}%` : '0%' }}
                       />
                     </div>
                   </div>
-                  <span className="text-sm font-medium w-6 text-right">{count}</span>
+                  <span className="w-6 text-right text-sm font-medium">{count}</span>
                 </div>
               ))}
             </div>

@@ -38,8 +38,7 @@ export default function LoginView() {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: authApi.login,
-    onSuccess: ({ user, accessToken, refreshToken }) => {
-      localStorage.setItem('refreshToken', refreshToken);
+    onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
       navigate({ to: redirect || '/dashboard', replace: true });
     },

@@ -6,9 +6,11 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 export const apiClient = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
-// Attach access token to every request
+// Attach access token when it is available for backward compatibility.
+// The backend also accepts the httpOnly accessToken cookie as the primary auth source.
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = useAuthStore.getState().accessToken;
   if (token) {
@@ -20,12 +22,12 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 // --- Refresh token logic ---
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: string) => void;
+  resolve: (value: string | null) => void;
   reject: (reason?: unknown) => void;
 }> = [];
 
 function processQueue(error: AxiosError | null, token: string | null = null) {
-  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token!)));
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token)));
   failedQueue = [];
 }
 
@@ -40,12 +42,12 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // If a refresh is already in flight, queue this request
+    // If a refresh is already in flight, queue this request.
     if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
+      return new Promise<string | null>((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       }).then((token) => {
-        original.headers.Authorization = `Bearer ${token}`;
+        if (token) original.headers.Authorization = `Bearer ${token}`;
         return apiClient(original);
       });
     }
@@ -53,32 +55,26 @@ apiClient.interceptors.response.use(
     original._retry = true;
     isRefreshing = true;
 
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    if (!storedRefreshToken) {
-      processQueue(error);
-      useAuthStore.getState().logout();
-      isRefreshing = false;
-      return Promise.reject(error);
-    }
-
     try {
-      // Use a plain axios call to avoid interceptor loops
+      // Use a plain axios call to avoid interceptor loops. Refresh token is sent by cookie.
       const { data } = await axios.post(
         `${API_URL}/auth/refresh`,
         {},
-        { headers: { Authorization: `Bearer ${storedRefreshToken}` } },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        },
       );
 
-      const newAccessToken: string = data.data.accessToken;
-      const newRefreshToken: string = data.data.refreshToken;
+      const newAccessToken: string | undefined = data.data?.accessToken;
 
-      useAuthStore.getState().setAccessToken(newAccessToken);
-      if (newRefreshToken) localStorage.setItem('refreshToken', newRefreshToken);
+      if (newAccessToken) {
+        useAuthStore.getState().setAccessToken(newAccessToken);
+        apiClient.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        original.headers.Authorization = `Bearer ${newAccessToken}`;
+      }
 
-      apiClient.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-      original.headers.Authorization = `Bearer ${newAccessToken}`;
-
-      processQueue(null, newAccessToken);
+      processQueue(null, newAccessToken || null);
       return apiClient(original);
     } catch (refreshError) {
       processQueue(refreshError as AxiosError);

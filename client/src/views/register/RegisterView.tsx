@@ -41,8 +41,7 @@ export default function RegisterView() {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: authApi.register,
-    onSuccess: ({ user, accessToken, refreshToken }) => {
-      localStorage.setItem('refreshToken', refreshToken);
+    onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
       navigate({ to: '/dashboard', replace: true });
     },

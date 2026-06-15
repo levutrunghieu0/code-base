@@ -1,4 +1,12 @@
-import { LayoutDashboard, BarChart3, Shield, Users, type LucideIcon } from 'lucide-react';
+import {
+  LayoutDashboard,
+  BarChart3,
+  Shield,
+  Users,
+  PackageSearch,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react';
 import { Role } from '@/types';
 
 export interface MenuItem {
@@ -29,6 +37,24 @@ export const routerConfig = {
       to: '/dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
+      roles: [Role.USER, Role.MANAGER, Role.ADMIN],
+    },
+    {
+      to: '/sales',
+      label: 'Sales History',
+      icon: BarChart3,
+      roles: [Role.USER, Role.MANAGER, Role.ADMIN],
+    },
+    {
+      to: '/forecast',
+      label: 'Forecast',
+      icon: TrendingUp,
+      roles: [Role.USER, Role.MANAGER, Role.ADMIN],
+    },
+    {
+      to: '/recommendations',
+      label: 'Recommendations',
+      icon: PackageSearch,
       roles: [Role.USER, Role.MANAGER, Role.ADMIN],
     },
     {

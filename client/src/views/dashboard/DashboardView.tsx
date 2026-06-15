@@ -1,16 +1,38 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BarChart3, LineChart, PackageSearch, Percent, TrendingUp } from 'lucide-react';
+import { useI18n } from '@/i18n/I18nProvider';
+import type { TranslationKey } from '@/i18n/translations';
 
-const summaryCards = [
-  { title: 'Total Sales', value: '$128,450', icon: BarChart3, helper: 'Historical sales amount' },
-  { title: 'Forecast Demand', value: '9,860 units', icon: TrendingUp, helper: 'Next 30 days' },
-  { title: 'Forecast Accuracy', value: 'MAPE 8.4%', icon: Percent, helper: 'MAE 12.6 / RMSE 18.2' },
+const summaryCards: Array<{
+  titleKey: TranslationKey;
+  value: string;
+  icon: typeof BarChart3;
+  helperKey: TranslationKey | 'dashboard.accuracyHelper';
+}> = [
   {
-    title: 'Inventory Risk',
+    titleKey: 'dashboard.totalSales',
+    value: '$128,450',
+    icon: BarChart3,
+    helperKey: 'dashboard.historicalSalesAmount',
+  },
+  {
+    titleKey: 'dashboard.forecastDemand',
+    value: '9,860',
+    icon: TrendingUp,
+    helperKey: 'dashboard.next30Days',
+  },
+  {
+    titleKey: 'dashboard.forecastAccuracy',
+    value: 'MAPE 8.4%',
+    icon: Percent,
+    helperKey: 'dashboard.accuracyHelper',
+  },
+  {
+    titleKey: 'dashboard.inventoryRisk',
     value: '14 SKUs',
     icon: PackageSearch,
-    helper: 'Need purchase review',
+    helperKey: 'dashboard.needPurchaseReview',
   },
 ];
 
@@ -21,28 +43,44 @@ const trendRows = [
   { date: '2026-07-04', historical: 112, forecast: 128 },
 ];
 
+const processSteps: TranslationKey[] = [
+  'dashboard.step.loadHistoricalSales',
+  'dashboard.step.dataCleaning',
+  'dashboard.step.featureEngineering',
+  'dashboard.step.forecastModel',
+  'dashboard.step.generatePrediction',
+  'dashboard.step.storeForecastResult',
+];
+
 export default function DashboardView() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">AI Sales Forecast Dashboard</h1>
-        <p className="text-muted-foreground">
-          Historical trend, forecast demand, accuracy, and inventory risk.
-        </p>
+        <h1 className="text-2xl font-bold">{t('dashboard.title')}</h1>
+        <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
         {summaryCards.map((item) => {
           const Icon = item.icon;
           return (
-            <Card key={item.title}>
+            <Card key={item.titleKey}>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">{item.title}</CardTitle>
+                <CardTitle className="text-sm font-medium">{t(item.titleKey)}</CardTitle>
                 <Icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{item.value}</div>
-                <p className="text-xs text-muted-foreground">{item.helper}</p>
+                <div className="text-2xl font-bold">
+                  {item.value}
+                  {item.titleKey === 'dashboard.forecastDemand' ? ` ${t('common.units')}` : ''}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {item.helperKey === 'dashboard.accuracyHelper'
+                    ? 'MAE 12.6 / RMSE 18.2'
+                    : t(item.helperKey)}
+                </p>
               </CardContent>
             </Card>
           );
@@ -53,7 +91,7 @@ export default function DashboardView() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <LineChart className="h-5 w-5" /> Historical Sales vs Forecast
+              <LineChart className="h-5 w-5" /> {t('dashboard.historyVsForecast')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -64,8 +102,12 @@ export default function DashboardView() {
                   className="grid grid-cols-3 items-center gap-3 rounded-lg border p-3 text-sm"
                 >
                   <span className="font-medium">{row.date}</span>
-                  <span>Actual: {row.historical}</span>
-                  <Badge variant="secondary">Forecast: {row.forecast}</Badge>
+                  <span>
+                    {t('dashboard.actual')}: {row.historical}
+                  </span>
+                  <Badge variant="secondary">
+                    {t('dashboard.forecast')}: {row.forecast}
+                  </Badge>
                 </div>
               ))}
             </div>
@@ -74,21 +116,14 @@ export default function DashboardView() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Forecast Process</CardTitle>
+            <CardTitle>{t('dashboard.process')}</CardTitle>
           </CardHeader>
           <CardContent>
             <ol className="space-y-3 text-sm">
-              {[
-                'Load Historical Sales',
-                'Data Cleaning',
-                'Feature Engineering',
-                'Forecast Model',
-                'Generate Prediction',
-                'Store Forecast Result',
-              ].map((step, index) => (
+              {processSteps.map((step, index) => (
                 <li key={step} className="flex items-center gap-3">
                   <Badge>{index + 1}</Badge>
-                  <span>{step}</span>
+                  <span>{t(step)}</span>
                 </li>
               ))}
             </ol>

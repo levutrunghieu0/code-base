@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useI18n } from '@/i18n/I18nProvider';
 
 const rows = [
   {
@@ -23,17 +24,17 @@ const rows = [
 ];
 
 export default function SalesHistoryView() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Sales History</h1>
-        <p className="text-muted-foreground">
-          Imported historical sales records used by the forecast engine.
-        </p>
+        <h1 className="text-2xl font-bold">{t('sales.title')}</h1>
+        <p className="text-muted-foreground">{t('sales.subtitle')}</p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Historical Sales Collection</CardTitle>
+          <CardTitle>{t('sales.collection')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {rows.map((row) => (
@@ -45,7 +46,9 @@ export default function SalesHistoryView() {
               <span>{row.product}</span>
               <Badge variant="secondary">{row.category}</Badge>
               <span>{row.date}</span>
-              <span>Qty {row.quantity}</span>
+              <span>
+                {t('sales.qty')} {row.quantity}
+              </span>
               <span>${row.amount}</span>
               <span>GP ${row.gp}</span>
             </div>

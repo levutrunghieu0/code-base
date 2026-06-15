@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { useAuthStore } from '@/store/auth.store';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -7,29 +9,31 @@ interface Props {
 
 export function PublicLayout({ children }: Props) {
   const { isAuthenticated } = useAuthStore();
+  const { t } = useI18n();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b bg-white sticky top-0 z-10">
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 border-b bg-white">
         <div className="container flex h-14 items-center justify-between">
           <Link to="/" className="text-lg font-bold text-primary">
-            FullStack App
+            {t('app.name')}
           </Link>
           <nav className="flex items-center gap-4">
+            <LanguageSwitcher />
             {isAuthenticated ? (
               <Link to="/dashboard" className="text-sm font-medium text-primary hover:underline">
-                Dashboard
+                {t('common.dashboard')}
               </Link>
             ) : (
               <>
                 <Link to="/login" className="text-sm font-medium hover:underline">
-                  Login
+                  {t('common.login')}
                 </Link>
                 <Link
                   to="/register"
                   className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
                 >
-                  Register
+                  {t('common.register')}
                 </Link>
               </>
             )}
@@ -40,7 +44,7 @@ export function PublicLayout({ children }: Props) {
       <main className="flex-1">{children}</main>
 
       <footer className="border-t py-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} FullStack App
+        © {new Date().getFullYear()} {t('app.name')}
       </footer>
     </div>
   );

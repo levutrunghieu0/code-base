@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useI18n } from '@/i18n/I18nProvider';
+import type { TranslationKey } from '@/i18n/translations';
 
-const periods = ['Next 7 Days', 'Next 30 Days', 'Next 90 Days'];
+const periodKeys: TranslationKey[] = ['forecast.next7', 'forecast.next30', 'forecast.next90'];
 const features = [
   'day_of_week',
   'week_of_year',
@@ -17,49 +19,49 @@ const features = [
 ];
 
 export default function ForecastView() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Forecast Generation</h1>
-        <p className="text-muted-foreground">
-          Generate and monitor demand forecasts by store, product, and category.
-        </p>
+        <h1 className="text-2xl font-bold">{t('forecast.title')}</h1>
+        <p className="text-muted-foreground">{t('forecast.subtitle')}</p>
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Forecast Periods</CardTitle>
+            <CardTitle>{t('forecast.periods')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {periods.map((p) => (
-              <Badge key={p} className="mr-2">
-                {p}
+            {periodKeys.map((key) => (
+              <Badge key={key} className="mr-2">
+                {t(key)}
               </Badge>
             ))}
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Models</CardTitle>
+            <CardTitle>{t('forecast.models')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p>Phase 1: Moving Average, Prophet</p>
-            <p>Phase 2: XGBoost, LightGBM</p>
-            <p>Phase 3: Vertex AI Forecasting</p>
+            <p>{t('forecast.phase1')}</p>
+            <p>{t('forecast.phase2')}</p>
+            <p>{t('forecast.phase3')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Accuracy</CardTitle>
+            <CardTitle>{t('forecast.accuracy')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>MAPE, MAE, and RMSE are calculated for forecast monitoring.</p>
+            <p>{t('forecast.accuracyDescription')}</p>
           </CardContent>
         </Card>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Feature Engineering</CardTitle>
+          <CardTitle>{t('forecast.featureEngineering')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           {features.map((f) => (

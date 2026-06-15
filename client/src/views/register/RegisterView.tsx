@@ -2,6 +2,7 @@ import { useNavigate, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMemo } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from '@/api/auth.api';
 import { useAuthStore } from '@/store/auth.store';
@@ -16,22 +17,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
-const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email'),
-  password: z
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
-    .regex(/\d/, 'Must contain at least one number'),
-});
-
-type FormValues = z.infer<typeof schema>;
+import { useI18n } from '@/i18n/I18nProvider';
 
 export default function RegisterView() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
+  const { t, language } = useI18n();
+
+  const schema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(2, t('validation.nameMin')),
+        email: z.string().email(t('validation.invalidEmail')),
+        password: z
+          .string()
+          .min(6, t('validation.passwordMin'))
+          .regex(/[A-Z]/, t('validation.passwordUppercase'))
+          .regex(/\d/, t('validation.passwordNumber')),
+      }),
+    [language, t],
+  );
+
+  type FormValues = z.infer<typeof schema>;
 
   const {
     register,
@@ -50,32 +57,37 @@ export default function RegisterView() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create account</CardTitle>
-        <CardDescription>Fill in your details to get started</CardDescription>
+        <CardTitle>{t('auth.createAccount')}</CardTitle>
+        <CardDescription>{t('auth.registerDescription')}</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit((v) => mutate(v))}>
         <CardContent className="space-y-4">
           {error && (
             <div className="rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              {(error as any)?.response?.data?.message || 'Registration failed'}
+              {(error as any)?.response?.data?.message || t('auth.registrationFailed')}
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="name">Full name</Label>
-            <Input id="name" placeholder="John Doe" {...register('name')} />
+            <Label htmlFor="name">{t('auth.fullName')}</Label>
+            <Input id="name" placeholder={t('placeholder.name')} {...register('name')} />
             {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" {...register('email')} />
+            <Label htmlFor="email">{t('common.email')}</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder={t('placeholder.email')}
+              {...register('email')}
+            />
             {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('common.password')}</Label>
             <Input id="password" type="password" placeholder="••••••••" {...register('password')} />
             {errors.password && (
               <p className="text-xs text-destructive">{errors.password.message}</p>
@@ -85,12 +97,12 @@ export default function RegisterView() {
 
         <CardFooter className="flex flex-col gap-3">
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Creating account…' : 'Create account'}
+            {isPending ? t('auth.creatingAccount') : t('auth.createAccount')}
           </Button>
           <p className="text-sm text-muted-foreground">
-            Already have an account?{' '}
+            {t('auth.alreadyHaveAccount')}{' '}
             <Link to="/login" className="text-primary hover:underline">
-              Sign in
+              {t('auth.signIn')}
             </Link>
           </p>
         </CardFooter>

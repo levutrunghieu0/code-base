@@ -8,10 +8,11 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Role } from '@/types';
+import type { TranslationKey } from '@/i18n/translations';
 
 export interface MenuItem {
   to: string;
-  label: string;
+  labelKey: TranslationKey;
   icon: LucideIcon;
   /** Roles được phép thấy menu item này (đồng bộ với routeConfig.ts của page) */
   roles: Role[];
@@ -35,43 +36,43 @@ export const routerConfig = {
   menu: [
     {
       to: '/dashboard',
-      label: 'Dashboard',
+      labelKey: 'common.dashboard',
       icon: LayoutDashboard,
       roles: [Role.USER, Role.MANAGER, Role.ADMIN],
     },
     {
       to: '/sales',
-      label: 'Sales History',
+      labelKey: 'nav.sales',
       icon: BarChart3,
       roles: [Role.USER, Role.MANAGER, Role.ADMIN],
     },
     {
       to: '/forecast',
-      label: 'Forecast',
+      labelKey: 'nav.forecast',
       icon: TrendingUp,
       roles: [Role.USER, Role.MANAGER, Role.ADMIN],
     },
     {
       to: '/recommendations',
-      label: 'Recommendations',
+      labelKey: 'nav.recommendations',
       icon: PackageSearch,
       roles: [Role.USER, Role.MANAGER, Role.ADMIN],
     },
     {
       to: '/manager',
-      label: 'Reports',
+      labelKey: 'nav.reports',
       icon: BarChart3,
       roles: [Role.MANAGER, Role.ADMIN],
     },
     {
       to: '/admin',
-      label: 'Admin',
+      labelKey: 'nav.admin',
       icon: Shield,
       roles: [Role.ADMIN],
     },
     {
       to: '/admin/users',
-      label: 'Users',
+      labelKey: 'nav.users',
       icon: Users,
       roles: [Role.ADMIN],
     },

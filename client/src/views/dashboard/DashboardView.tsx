@@ -51,9 +51,7 @@ export default function DashboardView() {
           </CardHeader>
           <CardContent>
             <div className="text-lg font-medium">
-              {user?.createdAt
-                ? new Date(user.createdAt).toLocaleDateString()
-                : '—'}
+              {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—'}
             </div>
           </CardContent>
         </Card>

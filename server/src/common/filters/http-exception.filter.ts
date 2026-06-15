@@ -18,14 +18,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const message =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : 'Internal server error';
+      exception instanceof HttpException ? exception.getResponse() : 'Internal server error';
 
     // 5xx: log full stack vào error log; 4xx chỉ warn
     if (status >= 500) {
@@ -34,9 +30,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : String(exception),
       );
     } else {
-      this.logger.warn(
-        `${request.method} ${request.url} ${status} - ${JSON.stringify(message)}`,
-      );
+      this.logger.warn(`${request.method} ${request.url} ${status} - ${JSON.stringify(message)}`);
     }
 
     response.status(status).json({

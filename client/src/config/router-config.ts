@@ -1,10 +1,4 @@
-import {
-  LayoutDashboard,
-  BarChart3,
-  Shield,
-  Users,
-  type LucideIcon,
-} from 'lucide-react';
+import { LayoutDashboard, BarChart3, Shield, Users, type LucideIcon } from 'lucide-react';
 import { Role } from '@/types';
 
 export interface MenuItem {

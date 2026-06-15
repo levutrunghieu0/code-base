@@ -24,7 +24,12 @@ const AppDataSource = new DataSource({
 
 const seeds = [
   { name: 'Admin User', email: 'admin@example.com', password: 'Admin@123', role: Role.ADMIN },
-  { name: 'Manager User', email: 'manager@example.com', password: 'Manager@123', role: Role.MANAGER },
+  {
+    name: 'Manager User',
+    email: 'manager@example.com',
+    password: 'Manager@123',
+    role: Role.MANAGER,
+  },
   { name: 'Regular User', email: 'user@example.com', password: 'User@123', role: Role.USER },
 ];
 
@@ -38,8 +43,10 @@ async function seed() {
     const existing = await repo.findOne({ where: { email: s.email } });
     if (existing) {
       console.log(`[SKIP] ${s.email} already exists`);
+
       continue;
     }
+
     const hashed = await bcrypt.hash(s.password, 10);
     const user = repo.create({ ...s, password: hashed });
     await repo.save(user);

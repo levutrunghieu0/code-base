@@ -17,10 +17,7 @@ export function PublicLayout({ children }: Props) {
           </Link>
           <nav className="flex items-center gap-4">
             {isAuthenticated ? (
-              <Link
-                to="/dashboard"
-                className="text-sm font-medium text-primary hover:underline"
-              >
+              <Link to="/dashboard" className="text-sm font-medium text-primary hover:underline">
                 Dashboard
               </Link>
             ) : (

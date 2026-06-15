@@ -7,9 +7,7 @@ export default function HomeView() {
   return (
     <div className="container py-16">
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
-          Fullstack Boilerplate
-        </h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4">Fullstack Boilerplate</h1>
         <p className="text-xl text-muted-foreground mb-8">
           React + NestJS + PostgreSQL — Role-based Access Control
         </p>

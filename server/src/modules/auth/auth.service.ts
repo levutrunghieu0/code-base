@@ -64,11 +64,7 @@ export class AuthService {
     return { user: this.sanitize(user), ...tokens };
   }
 
-  private async generateTokens(
-    userId: string,
-    email: string,
-    role: Role,
-  ): Promise<TokenPair> {
+  private async generateTokens(userId: string, email: string, role: Role): Promise<TokenPair> {
     const payload = { sub: userId, email, role };
 
     const [accessToken, refreshToken] = await Promise.all([

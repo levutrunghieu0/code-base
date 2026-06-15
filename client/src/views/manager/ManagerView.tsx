@@ -71,7 +71,15 @@ export default function ManagerView() {
             <div className="space-y-3">
               {Object.entries(stats.byRole).map(([role, count]) => (
                 <div key={role} className="flex items-center justify-between">
-                  <Badge variant={role === 'ADMIN' ? 'destructive' : role === 'MANAGER' ? 'default' : 'secondary'}>
+                  <Badge
+                    variant={
+                      role === 'ADMIN'
+                        ? 'destructive'
+                        : role === 'MANAGER'
+                          ? 'default'
+                          : 'secondary'
+                    }
+                  >
                     {role}
                   </Badge>
                   <div className="flex items-center gap-2 flex-1 mx-4">

@@ -181,7 +181,11 @@ function buildChildRoutes(
         if (location.pathname === '/404') return;
 
         // Nếu là dynamic id và không phải số, điều hướng 404
-        if (seg.startsWith('$') && params && (params as Record<string, unknown>)[seg.slice(1)] !== undefined) {
+        if (
+          seg.startsWith('$') &&
+          params &&
+          (params as Record<string, unknown>)[seg.slice(1)] !== undefined
+        ) {
           const idValue = (params as Record<string, unknown>)[seg.slice(1)];
           if (typeof idValue !== 'string' || !/^\d+$/.test(idValue)) {
             throw redirect({ to: '/404', replace: true });

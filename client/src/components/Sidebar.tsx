@@ -9,9 +9,7 @@ export function Sidebar() {
   const { user } = useAuthStore();
   const { handleLogout } = useLogout();
 
-  const visibleItems = routerConfig.menu.filter(
-    (item) => user && item.roles.includes(user.role),
-  );
+  const visibleItems = routerConfig.menu.filter((item) => user && item.roles.includes(user.role));
 
   return (
     <aside className="flex h-full w-60 flex-col bg-sidebar text-sidebar-foreground">

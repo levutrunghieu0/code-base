@@ -13,7 +13,11 @@ export default function UsersView() {
   const { user: me } = useAuthStore();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: users = [], isLoading, refetch } = useQuery({
+  const {
+    data: users = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['users'],
     queryFn: userApi.getAll,
   });

@@ -33,10 +33,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-    @CurrentUser() currentUser: User,
-  ) {
+  findOne(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() currentUser: User) {
     // ADMIN can view any user; others can only view themselves
     if (currentUser.role !== Role.ADMIN && currentUser.id !== id) {
       throw new ForbiddenException('Cannot access other users');

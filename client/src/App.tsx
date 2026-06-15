@@ -31,10 +31,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Auth state được bơm vào router context — beforeLoad guards đọc từ đây */}
-      <RouterProvider
-        router={router}
-        context={{ auth: { isAuthed: isAuthenticated, user } }}
-      />
+      <RouterProvider router={router} context={{ auth: { isAuthed: isAuthenticated, user } }} />
     </QueryClientProvider>
   );
 }
